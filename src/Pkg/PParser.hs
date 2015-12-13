@@ -88,13 +88,13 @@ filename = (do
         -- TODO: Report failing span better! We could lookAhead,
         -- or do something with DeltaParsing?
         filenameErrorMessage :: FilePath -> Maybe String
-        filenameErrorMessage path = either Just (const Nothing) $ do
+        filenameErrorMessage path = do
             checkEmpty path
             checkValid path
             checkNoDirectoryComponent path
             where
                 checkThat ok message =
-                    if ok then Right () else Left message
+                    if ok then Nothing else Just message
 
                 checkEmpty path =
                     checkThat (path /= "") "filename must not be empty"
